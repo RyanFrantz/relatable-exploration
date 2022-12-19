@@ -1,16 +1,23 @@
 import { gql } from 'apollo-server';
 
 const typeDefs = gql`
+  type Location {
+    id: Int!
+    city: String!
+    state: String!
+  }
+
   type Tenant {
     name: String!
+    location: Location
   }
 
   type Query {
     """
     Simple PoC.
     """
-    tenants: [Tenant]
-
+    tenants: [Tenant],
+    tenant(id: Int!): Tenant
   }
 `;
 
