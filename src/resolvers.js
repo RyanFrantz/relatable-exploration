@@ -30,7 +30,10 @@ const resolvers = {
       //console.log(JSON.stringify(args));
       //console.log(JSON.stringify(contextValue));
       //console.log(JSON.stringify(info, null, 2));
-      return tenants.find((u) => u.id == args.id);
+      let tenant = tenants.find((t) => t.id == args.id);
+      // Naive example of a lookahead query.
+      tenant.location = locations.find((l) => l.id == tenant.id);
+      return tenant;
     },
   },
   Tenant: {
@@ -39,7 +42,12 @@ const resolvers = {
       //console.log(JSON.stringify(args));
       //console.log(JSON.stringify(contextValue));
       //console.log(JSON.stringify(info, null, 2));
-      return locations.find((l) => l.id == parent.id);
+      if (parent?.location) {
+        console.log('Location resolved via lookahead query!');
+        return parent.location;
+      } else {
+        return locations.find((l) => l.id == parent.id);
+      }
     },
   }
 };
