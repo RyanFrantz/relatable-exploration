@@ -24,6 +24,7 @@
   "homepage": "https://github.com/RyanFrantz/relatable#readme",
   "dependencies": {
     "apollo-server": "^3.11.1",
+    "aws-sdk": "^2.1284.0",
     "graphql": "^16.6.0",
     "nodemon": "^2.0.20"
   }
