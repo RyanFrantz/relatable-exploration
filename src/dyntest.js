@@ -1,7 +1,11 @@
 // Run this with AWS_SDK_LOAD_CONFIG=true to pick up the region.
+// or...
+process.env.AWS_SDK_LOAD_CONFIG = true;
+
 import AWS from 'aws-sdk';
 
 const docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+
 
 /*
 const params = {
