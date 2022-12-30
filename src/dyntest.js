@@ -7,45 +7,25 @@ import AWS from 'aws-sdk';
 const docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 
-/*
 const params = {
-  TableName: 'sandbox',
+  TableName: 'sandbox-20221229',
   Item: {
-    'user': 'ryan',
-    'profile': 'my new details',
-    'new-attr': 'is this set?'
+    'pk': 'user#Ryan Frantz',
+    //'sk': 'profile#Ryan Frantz'
+    //'sk': 'github#RyanFrantz'
+    //'sk': 'twitter#Ryan_Frantz'
+    'sk': 'mastodon#ryan@very.social',
+    'createdAt': '20221229'
   }
 };
 
-docClient.put(params, function(err, data) {
-  if (err) {
-    console.log("Error", err);
-  } else {
-    console.log("Success", data);
-  }
-});
-*/
-
-/*
-const params = {
-  TableName: 'sandbox',
-  // We have defined a partition key and a sort key in the table so we
-  // need to specify both in the Key in order for this to be retrieved.
-  Key: {
-    'user': 'ryan',
-    'profile': 'my details'
-  }
-}
-*/
-
-
-/*
 try {
-  const item = await docClient.get(params).promise();
-  console.log(item);
+  await docClient.put(params).promise();
+  console.log('Successfully added item!');
 } catch (err) {
-  console.log("Error", err);
+  console.log('Error ', err);
 }
+/*
 */
 
 /* If an attribute name matches a reserved word (like 'user') or includes
@@ -53,15 +33,25 @@ try {
  * names and values to create our query!
  */
 const queryParams = {
-  TableName: 'sandbox',
-  KeyConditionExpression: '#u = :user',
-  ExpressionAttributeNames: {
-    '#u': 'user'
-  },
+  TableName: 'sandbox-20221229',
+  //KeyConditionExpression: 'pk = :user',
+  KeyConditionExpression: 'pk = :user and begins_with (sk, :handleType)',
   ExpressionAttributeValues: {
-    ':user': 'ryan'
+    ':user': 'user#Ryan Frantz',
+    ':handleType': 'github'
   }
 }
+
+/*
+const queryParams = {
+  TableName: 'sandbox-20221229',
+  IndexName: 'createdAt-sk-index',
+  KeyConditionExpression: 'createdAt = :date',
+  ExpressionAttributeValues: {
+    ':date': '20221229'
+  }
+}
+*/
 
 try {
   const items = await docClient.query(queryParams).promise();
