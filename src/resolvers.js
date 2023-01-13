@@ -35,6 +35,9 @@ const resolvers = {
       tenant.location = locations.find((l) => l.id == tenant.id);
       return tenant;
     },
+    fakeuser: (_, __, {dataSources}) => {
+      return dataSources.MyLambda.getFakeUser();
+    }
   },
   Tenant: {
     location: (parent, args, contextValue, info) => {

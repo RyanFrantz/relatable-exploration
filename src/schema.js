@@ -18,6 +18,13 @@ const typeDefs = gql`
     """
     tenants: [Tenant],
     tenant(id: Int!): Tenant
+    fakeuser: FakeUser
+  }
+
+  type FakeUser {
+    createdAt: String,
+    pk: String,
+    sk: String
   }
 `;
 
