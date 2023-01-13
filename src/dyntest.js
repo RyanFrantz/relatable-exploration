@@ -6,26 +6,27 @@ import AWS from 'aws-sdk';
 
 const docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
+const createdDate = '20230106';
 const handles = [
  {
-   'pk': 'user|Ryan Frantz',
-   'sk': 'canonical|Ryan Frantz',
-   'createdAt': '20221231'
+   'pk': 'user|Chuck Norris',
+   'sk': 'canonical|Chuck Norris',
+   'createdAt': createdDate
  },
  {
-   'pk': 'user|Ryan Frantz',
-   'sk': 'github|RyanFrantz',
-   'createdAt': '20221231'
+   'pk': 'user|Chuck Norris',
+   'sk': 'github|WhatDiffDoesItMake',
+   'createdAt': createdDate
  },
  {
-   'pk': 'user|Ryan Frantz',
-   'sk': 'twitter|Ryan_Frantz',
-   'createdAt': '20221231'
+   'pk': 'user|Chuck Norris',
+   'sk': 'twitter|CharlesInCharge',
+   'createdAt': createdDate
  },
  {
-   'pk': 'user|Ryan Frantz',
-   'sk': 'mastodon|ryan@very.social',
-   'createdAt': '20221231'
+   'pk': 'user|Chuck Norris',
+   'sk': 'mastodon|chuck@not.social',
+   'createdAt': createdDate
  },
 ];
 
@@ -52,7 +53,7 @@ const queryParams = [
     TableName: 'sandbox-20221229',
     KeyConditionExpression: 'pk = :user and begins_with (sk, :handleType)',
     ExpressionAttributeValues: {
-      ':user': 'user|Ryan Frantz',
+      ':user': 'user|Chuck Norris',
       ':handleType': 'github'
     }
   },
@@ -61,7 +62,7 @@ const queryParams = [
     IndexName: 'createdAt-sk-index',
     KeyConditionExpression: 'createdAt = :date',
     ExpressionAttributeValues: {
-      ':date': '20221231'
+      ':date': createdDate
     }
 }
 ]
