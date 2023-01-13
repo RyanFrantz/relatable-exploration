@@ -23,9 +23,14 @@
   },
   "homepage": "https://github.com/RyanFrantz/relatable#readme",
   "dependencies": {
+    "@apollo/datasource-rest": "^4.3.2",
+    "apollo-datasource-rest": "^3.7.0",
     "apollo-server": "^3.11.1",
     "aws-sdk": "^2.1284.0",
     "graphql": "^16.6.0",
     "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "aws-cdk-lib": "^2.59.0"
   }
 }
