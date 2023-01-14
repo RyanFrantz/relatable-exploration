@@ -2,6 +2,10 @@ import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as path from 'path';
+// ES module scope doesn't define __dirname.
+import { fileURLToPath } from 'url'
+const thisModulesDir = path.dirname(fileURLToPath(import.meta.url));
 
 const accountId = '288507109142';
 const region = 'us-east-2';
@@ -49,14 +53,11 @@ class RelatableStack extends cdk.Stack {
       ]
     });
 
-    const lambdaFunction = new lambda.Function(this, 'second', {
-      handler: 'index.mjs.handler',
-      code: lambda.Code.fromInline(`
-        export const handler = async(event) => {
-          console.log('Event: ', event);
-          return 'My second Lambda!'
-        };
-      `),
+    const lambdaFunction = new lambda.Function(this, 'third', {
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(
+        path.join(thisModulesDir, '/../../lambda/src/third/')
+      ),
       runtime: lambda.Runtime.NODEJS_18_X
     });
 
