@@ -1,12 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 const accountId = '288507109142';
 const region = 'us-east-2';
 const ALLOW = iam.Effect.ALLOW;
 
-class InfraStack extends cdk.Stack {
+class RelatableStack extends cdk.Stack {
   /**
    *
    * @param {Construct} scope
@@ -48,6 +49,22 @@ class InfraStack extends cdk.Stack {
       ]
     });
 
+    const lambdaFunction = new lambda.Function(this, 'second', {
+      handler: 'index.mjs.handler',
+      code: lambda.Code.fromInline(`
+        export const handler = async(event) => {
+          console.log('Event: ', event);
+          return 'My second Lambda!'
+        };
+      `),
+      runtime: lambda.Runtime.NODEJS_18_X
+    });
+
+    // TODO: Learn about service roles and why they are necessary.
+    const functionUrl = lambdaFunction.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE
+    });
+
     //https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb-readme.html
     // TODO: Add auto-scaling, like the sandbox table.
     const relatableTable = new dynamodb.Table(this, 'relatable', {
@@ -80,4 +97,4 @@ class InfraStack extends cdk.Stack {
   }
 }
 
-export { InfraStack };
+export { RelatableStack };

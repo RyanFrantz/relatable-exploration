@@ -1,5 +1,5 @@
 {
-  "app": "node bin/infra.js",
+  "app": "node bin/relatable.js",
   "watch": {
     "include": [
       "**"
