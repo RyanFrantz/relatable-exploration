@@ -20,7 +20,7 @@ class RelatableStack extends cdk.Stack {
    */
   constructor(scope, id, props) {
     super(scope, id, props);
-    console.log(`InfraStack id: ${id}`);
+    console.log(`RelatableStack id: ${id}`);
 
     //https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam-readme.html
     const lambdaExecutionPolicy = new iam.ManagedPolicy(this, 'RelatableLambdaExecutionPolicy', {
@@ -40,7 +40,7 @@ class RelatableStack extends cdk.Stack {
             'logs:PutLogEvents'
           ],
           resources: [
-            `arn:aws:logs:${region}:${accountId}:log-group:/aws/lambda/first:*`
+            `arn:aws:logs:${region}:${accountId}:log-group:/aws/lambda/*:*`
           ],
         }),
         new iam.PolicyStatement({
@@ -53,12 +53,20 @@ class RelatableStack extends cdk.Stack {
       ]
     });
 
+    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.Role.html
+    const lambdaRole = new iam.Role(this, 'RelatableLambdaRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      description: 'Role assumed by Relatable Lambda functions',
+    });
+    lambdaRole.addManagedPolicy(lambdaExecutionPolicy);
+
     const lambdaFunction = new lambda.Function(this, 'third', {
       handler: 'index.handler',
       code: lambda.Code.fromAsset(
         path.join(thisModulesDir, '/../../lambda/src/third/')
       ),
-      runtime: lambda.Runtime.NODEJS_18_X
+      runtime: lambda.Runtime.NODEJS_18_X,
+      role: lambdaRole
     });
 
     // TODO: Learn about service roles and why they are necessary.
@@ -68,6 +76,7 @@ class RelatableStack extends cdk.Stack {
 
     //https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_dynamodb-readme.html
     // TODO: Add auto-scaling, like the sandbox table.
+    /*
     const relatableTable = new dynamodb.Table(this, 'relatable', {
       billingMode: dynamodb.BillingMode.PROVISIONED,
       readCapacity: 1,
@@ -95,6 +104,7 @@ class RelatableStack extends cdk.Stack {
       // Project all keys into the index.
       projectionType: dynamodb.ProjectionType.ALL
     });
+    */
   }
 }
 
