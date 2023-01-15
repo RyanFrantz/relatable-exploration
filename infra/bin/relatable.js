@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 import cdk from 'aws-cdk-lib';
-import { RelatableStack } from '../lib/relatable-stack.js';
+import { IamStack } from '../lib/iam-stack.js';
+import { LambdaStack } from '../lib/lambda-stack.js';
+import { DynamoStack } from '../lib/dynamo-stack.js';
 
 const app = new cdk.App();
-new RelatableStack(app, 'RelatableStack', {
+new IamStack(app, 'IamStack', {
   /* NOTE: Not all resources will receive this tag, since not all resources
    * support tags.
    * Ex. IAM Managed policies will not be tagged.*/
@@ -15,4 +17,17 @@ new RelatableStack(app, 'RelatableStack', {
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+});
+
+new LambdaStack(app, 'LambdaStack', {
+  lambdaRole: IamStack.lambdaRole,
+  tags: {
+    Product: 'Relatable'
+  }
+});
+
+new DynamoStack(app, 'DynamoStack', {
+  tags: {
+    Product: 'Relatable'
+  }
 });
