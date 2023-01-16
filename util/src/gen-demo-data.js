@@ -6,29 +6,7 @@ import AWS from 'aws-sdk';
 
 const docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
-const createdDate = '20230106';
-const handles = [
- {
-   'pk': 'user|Chuck Norris',
-   'sk': 'canonical|Chuck Norris',
-   'createdAt': createdDate
- },
- {
-   'pk': 'user|Chuck Norris',
-   'sk': 'github|WhatDiffDoesItMake',
-   'createdAt': createdDate
- },
- {
-   'pk': 'user|Chuck Norris',
-   'sk': 'twitter|CharlesInCharge',
-   'createdAt': createdDate
- },
- {
-   'pk': 'user|Chuck Norris',
-   'sk': 'mastodon|chuck@not.social',
-   'createdAt': createdDate
- },
-];
+import { handles } from './mockedHandles.js';
 
 let params = {
   TableName: 'sandbox-20221229',
@@ -57,14 +35,6 @@ const queryParams = [
       ':handleType': 'github'
     }
   },
-  {
-    TableName: 'sandbox-20221229',
-    IndexName: 'createdAt-sk-index',
-    KeyConditionExpression: 'createdAt = :date',
-    ExpressionAttributeValues: {
-      ':date': createdDate
-    }
-}
 ]
 
 try {
