@@ -132,16 +132,19 @@ const handles = [
   {
     'pk': 'user|Chuck Norris',
     'sk': 'github|WhatDiffDoesItMake',
+    'handleType': 'github',
     'createdAt': '2023-01-15T14:29:03Z'
   },
   {
     'pk': 'user|Chuck Norris',
     'sk': 'twitter|CharlesInCharge',
+    'handleType': 'twitter',
     'createdAt': '2023-01-15T14:29:03Z'
   },
   {
     'pk': 'user|Chuck Norris',
     'sk': 'mastodon|chuck@not.social',
+    'handleType': 'mastodon',
     'createdAt': '2023-01-15T14:29:03Z'
   },
 ];
