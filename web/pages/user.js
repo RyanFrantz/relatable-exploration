@@ -22,7 +22,6 @@ const fetcher = async (...args) => {
 };
 
 const lambdaUrl = 'https://7dsgyi7ncu7tn6gzrzzgiobzoq0pykmb.lambda-url.us-east-2.on.aws'
-const handlePrefix = /\w+\|/; // We'll strip this from the fetched handles
 
 export default function User() {
   const { data, error, isLoading } = useSWR(lambdaUrl, fetcher)
@@ -55,10 +54,10 @@ export default function User() {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row.sk}
+              key={row.handle}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell >{row.sk.replace(handlePrefix, '')}</TableCell>
+              <TableCell >{row.handle}</TableCell>
               <TableCell >{row.handleType}</TableCell>
               <TableCell >{row.employmentStatus}</TableCell>
             </TableRow>
