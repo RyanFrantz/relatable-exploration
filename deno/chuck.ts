@@ -1,36 +1,29 @@
 import { serve } from 'https://deno.land/std@0.155.0/http/server.ts'
+import mysql from 'npm:mysql2@^2.3.3/promise';
 
-const handles = [
-  {
-    'pk': 'user|Chuck Norris',
-    'sk': 'canonical|Chuck Norris',
-    'handleType': 'canonical',
-    'employmentStatus': 'contractor',
-    'notes': 'Actually, works for no one.',
-    'createdAt': '2023-01-12T15:45:09Z'
-  },
-  {
-    'pk': 'user|Chuck Norris',
-    'sk': 'github|WhatDiffDoesItMake',
-    'handleType': 'github',
-    'createdAt': '2023-01-15T14:29:03Z'
-  },
-  {
-    'pk': 'user|Chuck Norris',
-    'sk': 'twitter|CharlesInCharge',
-    'handleType': 'twitter',
-    'createdAt': '2023-01-15T14:29:03Z'
-  },
-  {
-    'pk': 'user|Chuck Norris',
-    'sk': 'mastodon|chuck@not.social',
-    'handleType': 'mastodon',
-    'createdAt': '2023-01-15T14:29:03Z'
-  },
-];
+// Kastner: I ran this as:
+// DATABASE_URL=mysql://j2zi60vl5robjixlngfe:pscale_pw_PDrp8X9RTqSz01JEqsGwfnUxK1e48ESp7sqKTXOj6Yi@us-east.connect.psdb.cloud/relatable?ssl={'"rejectUnauthorized":true}' deno run -A chuck.ts
+
+// TODO: Replace with discrete components (e.g. DB_USER, DB_PASS...)?
+const dbUrl = Deno.env.get('DATABASE_URL');
 
 serve(async (req) => {
-  return new Response(JSON.stringify({ handles }), {
+  console.log('Before connection...');
+  const conn = await mysql.createConnection(dbUrl);
+  // Try breaking the connection details apart...
+  /*
+  const conn = await mysql.createConnection({
+    host: 'us-east.connect.psdb.cloud',
+    user: 'j2zi60vl5robjixlngfe',
+    password: 'pscale_pw_PDrp8X9RTqSz01JEqsGwfnUxK1e48ESp7sqKTXOj6Yi',
+    database: 'relatable'
+  });
+ */
+  console.log('Connected: ', conn);
+  const results = await conn.query(`SELECT handle, handleType from handles AS h WHERE h.user_id = 1`);
+  await conn.end();
+  console.log('Results: ', results);
+  return new Response(JSON.stringify({ results }), {
     headers: { 'Content-Type': 'application/json' },
     status: 200,
   });
