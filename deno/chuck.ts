@@ -1,29 +1,37 @@
+/* Deployed via
+ *  DENO_DEPLOY_TOKEN=... deployctl deploy --project=safe-badger-75 --prod chuck.ts
+ */
 import { serve } from 'https://deno.land/std@0.155.0/http/server.ts'
-import mysql from 'npm:mysql2@^2.3.3/promise';
+import { connect } from 'https://esm.sh/*@planetscale/database@1.4.0';
 
-// Kastner: I ran this as:
-// DATABASE_URL=mysql://j2zi60vl5robjixlngfe:pscale_pw_PDrp8X9RTqSz01JEqsGwfnUxK1e48ESp7sqKTXOj6Yi@us-east.connect.psdb.cloud/relatable?ssl={'"rejectUnauthorized":true}' deno run -A chuck.ts
+// Planetscale config.
+// Env vars are expected to be defined in the Deno Deploy project.
+const pConfig = {
+  host: Deno.env.get('DB_HOST') || '',
+  username: Deno.env.get('DB_USER') || '',
+  password: Deno.env.get('DB_PASS') || ''
+};
 
-// TODO: Replace with discrete components (e.g. DB_USER, DB_PASS...)?
-const dbUrl = Deno.env.get('DATABASE_URL');
+const conn = connect(pConfig);
 
 serve(async (req) => {
-  console.log('Before connection...');
-  const conn = await mysql.createConnection(dbUrl);
-  // Try breaking the connection details apart...
-  /*
-  const conn = await mysql.createConnection({
-    host: 'us-east.connect.psdb.cloud',
-    user: 'j2zi60vl5robjixlngfe',
-    password: 'pscale_pw_PDrp8X9RTqSz01JEqsGwfnUxK1e48ESp7sqKTXOj6Yi',
-    database: 'relatable'
-  });
- */
-  console.log('Connected: ', conn);
-  const results = await conn.query(`SELECT handle, handleType from handles AS h WHERE h.user_id = 1`);
-  await conn.end();
-  console.log('Results: ', results);
-  return new Response(JSON.stringify({ results }), {
+  const url = new URL(req.url);
+  const stmt_params = { id: 0 }; // Sane default.
+  // Grab the first part of the pathname to use as input for a user ID.
+  // NOTE: No checks for numberness, here.
+  const user_id = url.pathname.split('/')[1];
+  if (user_id) {
+    stmt_params.id = user_id;
+  }
+  const stmt = `
+    SELECT u.name AS username, h.handle, h.handleType
+    FROM user AS u
+    INNER JOIN handles AS h
+    ON h.user_id = :id;
+  `;
+  const results = await conn.execute(stmt, stmt_params);
+  const rows = results.rows;
+  return new Response(JSON.stringify(rows), {
     headers: { 'Content-Type': 'application/json' },
     status: 200,
   });
