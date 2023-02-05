@@ -24,7 +24,7 @@ serve(async (req) => {
     stmt_params.id = user_id;
   }
   const stmt = `
-    SELECT u.name AS username, h.handle, h.handleType
+    SELECT u.name AS user, h.handle, h.handleType
     FROM user AS u
     INNER JOIN handles AS h
     ON h.user_id = :id;
