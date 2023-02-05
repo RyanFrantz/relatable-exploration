@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 
 // The function URL for my toy AWS Lambda.
-const lambdaUrl = 'https://7dsgyi7ncu7tn6gzrzzgiobzoq0pykmb.lambda-url.us-east-2.on.aws';
+const lambdaUrl = 'https://safe-badger-75.deno.dev/1';
 
 interface UserHandle {
   employmentStatus: string;
