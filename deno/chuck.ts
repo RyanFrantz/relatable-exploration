@@ -27,7 +27,8 @@ serve(async (req) => {
     SELECT u.name AS user, h.handle, h.handleType
     FROM user AS u
     INNER JOIN handles AS h
-    ON h.user_id = :id;
+    ON h.user_id = u.id
+    WHERE u.id = :id;
   `;
   const results = await conn.execute(stmt, stmt_params);
   const rows = results.rows;
