@@ -40,6 +40,12 @@ export default function User({data}: PageProps<UserHandles>) {
       <meta name="author" content="frantz"/>
       <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
     </Head>
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/users">Users</a>
+      </nav>
+    </header>
     <main>
       <article>
       <section>
