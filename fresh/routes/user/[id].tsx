@@ -33,6 +33,7 @@ export const handler: Handlers = {
 
 export default function User({data}: PageProps<UserHandles>) {
   console.log(data);
+  const username = data[0].user;
   return (
     <>
     <Head>
@@ -40,24 +41,27 @@ export default function User({data}: PageProps<UserHandles>) {
       <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
     </Head>
     <main>
+      <article>
+      <section>
+      {username}
+      </section>
       <table>
         <thead>
           <tr>
-            <th>User</th>
-            <th>Handle Type</th>
             <th>Handle</th>
+            <th>Handle Type</th>
           </tr>
         </thead>
         <tbody>
         {data.map((userHandle) => (
           <tr key={userHandle.handle}>
-            <td>{userHandle.user}</td>
-            <td>{userHandle.handleType}</td>
             <td>{userHandle.handle}</td>
+            <td>{userHandle.handleType}</td>
           </tr>
         ))}
         </tbody>
       </table>
+      </article>
     </main>
     </>
   );
