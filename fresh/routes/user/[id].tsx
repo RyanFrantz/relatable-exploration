@@ -31,19 +31,27 @@ export const handler: Handlers = {
 }
 
 export default function User({data}: PageProps<UserHandles>) {
+  console.log(data);
   return (
     <main>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Handle Type</th>
+            <th>Handle</th>
+          </tr>
+        </thead>
+        <tbody>
       {data.map((userHandle) => (
-        <div key={userHandle.handle}>
-          <p>User: {userHandle.user}</p>
-          {userHandle.employmentStatus &&
-          <p>Employment: {userHandle.employmentStatus}</p>
-          }
-          <p>Handle Type: {userHandle.handleType}</p>
-          <p>Handle: {userHandle.handle}</p>
-          <hr/>
-        </div>
+        <tr key={userHandle.handle}>
+          <td>{userHandle.user}</td>
+          <td>{userHandle.handleType}</td>
+          <td>{userHandle.handle}</td>
+        </tr>
       ))}
+        </tbody>
+      </table>
     </main>
   );
 }
