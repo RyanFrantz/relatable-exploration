@@ -7,6 +7,7 @@ import UserHandleRow from "../../islands/UserHandleRow.tsx";
 const lambdaUrl = 'https://safe-badger-75.deno.dev';
 
 interface UserHandle {
+  id: string,
   employmentStatus: string; // FIXME: We're not sending this at the moment.
   handleType: string;
   handle: string;

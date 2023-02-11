@@ -14,13 +14,17 @@ const updateHandle = async (userHandle, handleText: string) => {
     // Probably the main reason I have no friends.
     return;
   }
+  // FIXME: If we update a canonical handle, we have to update the relevant
+  // record in the 'user' table. Remind me why there is a user record that
+  // corresponds with a 'canonical' handle...
   const stmt = `
     UPDATE handles
     SET handle = :text
-    WHERE handleType = :handleType
+    WHERE user_id = :user_id AND handleType = :handleType
   `;
   const stmt_params = {
     text: handleText,
+    user_id: userHandle.user_id,
     handleType: userHandle.handleType
   };
   const results = await conn.execute(stmt, stmt_params);
@@ -30,6 +34,7 @@ const updateHandle = async (userHandle, handleText: string) => {
 
 // Expect of prop named 'userhandle' and return a table row.
 export default function UserHandleRow({userHandle}) {
+  //console.log(userHandle);
   return (
   <tr key={userHandle.handle}>
     <td contenteditable="true"
