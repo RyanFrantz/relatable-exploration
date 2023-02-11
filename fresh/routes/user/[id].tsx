@@ -1,10 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
+import { Head } from "$fresh/runtime.ts";
 
 // The function URL for my toy AWS Lambda.
 const lambdaUrl = 'https://safe-badger-75.deno.dev';
 
 interface UserHandle {
-  employmentStatus: string;
+  employmentStatus: string; // FIXME: We're not sending this at the moment.
   handleType: string;
   handle: string;
   user: string;
@@ -33,6 +34,11 @@ export const handler: Handlers = {
 export default function User({data}: PageProps<UserHandles>) {
   console.log(data);
   return (
+    <>
+    <Head>
+      <meta name="author" content="frantz"/>
+      <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
+    </Head>
     <main>
       <table>
         <thead>
@@ -43,15 +49,16 @@ export default function User({data}: PageProps<UserHandles>) {
           </tr>
         </thead>
         <tbody>
-      {data.map((userHandle) => (
-        <tr key={userHandle.handle}>
-          <td>{userHandle.user}</td>
-          <td>{userHandle.handleType}</td>
-          <td>{userHandle.handle}</td>
-        </tr>
-      ))}
+        {data.map((userHandle) => (
+          <tr key={userHandle.handle}>
+            <td>{userHandle.user}</td>
+            <td>{userHandle.handleType}</td>
+            <td>{userHandle.handle}</td>
+          </tr>
+        ))}
         </tbody>
       </table>
     </main>
+    </>
   );
 }
