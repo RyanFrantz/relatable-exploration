@@ -1,6 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import Footer from "../../components/Footer.tsx";
+import UserHandleRow from "../../islands/UserHandleRow.tsx";
 
 // The function URL for my toy AWS Lambda.
 const lambdaUrl = 'https://safe-badger-75.deno.dev';
@@ -61,10 +62,7 @@ export default function User({data}: PageProps<UserHandles>) {
         </thead>
         <tbody>
         {data.map((userHandle) => (
-          <tr key={userHandle.handle}>
-            <td>{userHandle.handle}</td>
-            <td>{userHandle.handleType}</td>
-          </tr>
+          <UserHandleRow userHandle={userHandle}/>
         ))}
         </tbody>
       </table>
