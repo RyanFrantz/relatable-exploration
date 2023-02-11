@@ -1,25 +1,23 @@
 import { Head } from "$fresh/runtime.ts";
-import Counter from "../islands/Counter.tsx";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Fresh App</title>
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
       </Head>
-      <div>
-        <img
-          src="/logo.svg"
-          width="128"
-          height="128"
-          alt="the fresh logo: a sliced lemon dripping with juice"
-        />
-        <p>
-          Welcome to `fresh`. Try updating this message in the ./routes/index.tsx
-          file, and refresh.
-        </p>
-        <Counter start={3} />
-      </div>
+      <header>
+        <nav>
+          <a href="/user/1">User 1</a>
+          <a href="/user/7">User 7</a>
+        </nav>
+      </header>
+      <main>
+        Relatable Demo
+      </main>
+      <footer>
+        I'm a footer.
+      </footer>
     </>
   );
 }
