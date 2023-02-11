@@ -1,4 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
+import Footer from "../components/Footer.tsx";
 
 export default function Home() {
   return (
@@ -8,16 +9,13 @@ export default function Home() {
       </Head>
       <header>
         <nav>
-          <a href="/user/1">User 1</a>
-          <a href="/user/7">User 7</a>
+          <a href="/users">Users</a>
         </nav>
       </header>
       <main>
         Relatable Demo
       </main>
-      <footer>
-        I'm a footer.
-      </footer>
+      <Footer/>
     </>
   );
 }
