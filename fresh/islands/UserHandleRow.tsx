@@ -1,19 +1,12 @@
 import { connect } from 'https://esm.sh/*@planetscale/database@1.4.0';
 import { planetscaleConfig } from '../planetscaleConfig.ts';
+import { useState } from "preact/hooks";
 
 const conn = connect(planetscaleConfig);
 
 // Update the text of the user's handle and related handle type.
 // TODO: Only update if the text is different from our starting state.
 const updateHandle = async (userHandle, handleText: string) => {
-  // FIXME: We really should use component state here to _always_
-  // update on _any_ difference (not just the starting state when
-  // the browser first drew the page).
-  if (userHandle.handle === handleText) {
-    // Don't make the call if you've got nothing to say.
-    // Probably the main reason I have no friends.
-    return;
-  }
   // FIXME: If we update a canonical handle, we have to update the relevant
   // record in the 'user' table. Remind me why there is a user record that
   // corresponds with a 'canonical' handle...
@@ -28,22 +21,36 @@ const updateHandle = async (userHandle, handleText: string) => {
     handleType: userHandle.handleType
   };
   const results = await conn.execute(stmt, stmt_params);
-  console.log(results);
+  //console.log(results);
   console.log(`UPDATE ${userHandle.handle} to ${handleText}`);
 };
 
-// Expect of prop named 'userhandle' and return a table row.
+// Expect a userHandle object as a prop and return a table row.
 export default function UserHandleRow({userHandle}) {
-  //console.log(userHandle);
+  const [displayedHandle, setDisplayedHandle] = useState(userHandle.handle);
   return (
-  <tr key={userHandle.handle}>
+  <tr key={displayedHandle}>
     <td contenteditable="true"
       // When the row loses focus, write the result to the database.
       // It might make more sense to share this state one level
       // higher and save in a batch. This way also feels nice.
-      onBlur={(e) => {updateHandle(userHandle, e.target.innerText)} }
+      onBlur={
+        (e) => {
+          const updatedHandle = e.target.innerText;
+          console.log('CURRENT STATE: ', displayedHandle);
+          console.log('INNER TEXT: ', updatedHandle);
+          // Don't make the call if you've got nothing to say.
+          // Probably the main reason I have no friends.
+          if (updatedHandle !== displayedHandle) {
+            updateHandle(userHandle, updatedHandle);
+            // FIXME: The state doesn't update...
+            setDisplayedHandle(updatedHandle);
+            console.log('AFTER setDisplayedHandle(): ', displayedHandle);
+          }
+        }
+      }
     >
-    {userHandle.handle}
+    {displayedHandle}
     </td>
     <td>{userHandle.handleType}</td>
   </tr>
