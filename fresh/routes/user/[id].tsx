@@ -36,7 +36,7 @@ export const handler: Handlers = {
 
 export default function User({data}: PageProps<UserHandles>) {
   console.log(data);
-  const username = data[0].user;
+  const username = data[0]?.user;
   return (
     <>
     <Head>
@@ -52,7 +52,7 @@ export default function User({data}: PageProps<UserHandles>) {
     <main>
       <article>
       <section>
-      {username}
+      {username || "No handles found."}
       </section>
       <table>
         <thead>
