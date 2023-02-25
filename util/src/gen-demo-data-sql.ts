@@ -22,7 +22,7 @@ console.log(`Creating the 'user' and 'handles'...`);
 const createUserTable = `
 CREATE TABLE IF NOT EXISTS user (
   id INT UNIQUE AUTO_INCREMENT,
-  name TEXT NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
   employmentStatus TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
