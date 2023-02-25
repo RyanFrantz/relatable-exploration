@@ -21,14 +21,21 @@ interface Users extends Array<User>{};
 // TODO: Add optional 'drop first' support so we can load a fresh batch of
 // users, rather than appending to the table.
 const insertUsers = async (users: Users) => {
+  // `name` should be unique. Do nothing when a name already exists.
   const stmt = `
-    INSERT INTO user (name, employmentStatus) VALUES(:name, :employmentStatus)
+    INSERT INTO user (name, employmentStatus)
+    VALUES(:name, :employmentStatus)
+    ON DUPLICATE KEY UPDATE id=id
   `;
 
   // TODO: Support a single INSERT with multiple values.
   users.forEach(async (user) => {
     const results = await conn.execute(stmt, user);
-    console.log(results.insertId);
+    if (results.insertId) {
+      console.log(`Inserted record for ${user.name}!`);
+    } else {
+      console.log(`${user.name} already exists.`);
+    }
   });
 };
 
