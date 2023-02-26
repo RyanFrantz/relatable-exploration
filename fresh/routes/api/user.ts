@@ -1,6 +1,10 @@
 import { Handlers } from "$fresh/server.ts";
 import { connect } from 'https://esm.sh/*@planetscale/database@1.4.0';
 
+// Insert a single user.
+// curl -v -X POST localhost:5000/api/user \
+//   -d '{"name": "Betty White", "employmentStatus": "fulltime"}'
+
 // Planetscale config.
 // Env vars are expected to be defined in the Deno Deploy project.
 const pConfig = {
@@ -16,11 +20,9 @@ interface User {
   employmentStatus: string;
 }
 
-interface Users extends Array<User>{};
-
-// TODO: Add optional 'drop first' support so we can load a fresh batch of
-// users, rather than appending to the table.
-const insertUsers = async (users: Users) => {
+// Inserts a user into the database.
+// Returns a number representing the HTTP response and a helpful string message.
+const insertUser = async (user: User): [number, string] => {
   // `name` should be unique. Do nothing when a name already exists.
   const stmt = `
     INSERT INTO user (name, employmentStatus)
@@ -28,15 +30,14 @@ const insertUsers = async (users: Users) => {
     ON DUPLICATE KEY UPDATE id=id
   `;
 
-  // TODO: Support a single INSERT with multiple values.
-  users.forEach(async (user) => {
-    const results = await conn.execute(stmt, user);
-    if (results.insertId) {
-      console.log(`Inserted record for ${user.name}!`);
-    } else {
-      console.log(`${user.name} already exists.`);
-    }
-  });
+  const results = await conn.execute(stmt, user);
+  if (results.insertId) {
+    // Created
+    return [201, `Created record for ${user.name}!`];
+  } else {
+    // Conflict
+    return [409, `${user.name} already exists.`];
+  }
 };
 
 export const handler: Handlers = {
@@ -46,14 +47,19 @@ export const handler: Handlers = {
   async POST(req) {
     let body;
     try {
+      // TODO: Validate the body structure meets our expectation.
       body = await req.json();
     } catch (err) {
       console.log('Error: ', err.message);
       return new Response('Invalid input!', { status: 400 });
     }
     // TODO: De-taint input.
-    await insertUsers(body);
-    return new Response(JSON.stringify(body));
+    const [responseCode, msg] = await insertUser(body);
+    return new Response(
+      JSON.stringify({message: msg}), {
+        status: responseCode
+      }
+    );
   }
 };
 
