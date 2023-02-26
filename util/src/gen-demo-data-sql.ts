@@ -35,12 +35,13 @@ const createHandlesTable = `
 -- foreign key constraints are not allowed, see https://vitess.io/blog/2021-06-15-online-ddl-why-no-fk/
 CREATE TABLE IF NOT EXISTS handles (
   id INT UNIQUE AUTO_INCREMENT,
-  user_id INT,
-  handle TEXT NOT NULL,
-  handleType TEXT NOT NULL,
+  user_id INT NOT NULL,
+  handle VARCHAR(255) NOT NULL,
+  handleType VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  UNIQUE KEY uniq_user_handle (user_id, handle, handleType)
 ) CHARACTER SET utf8mb4;
 `;
 
