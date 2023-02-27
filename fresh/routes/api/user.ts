@@ -21,8 +21,9 @@ interface User {
 }
 
 // Inserts a user into the database.
-// Returns a number representing the HTTP response and a helpful string message.
-const insertUser = async (user: User): [number, string] => {
+// Returns a number representing the HTTP response and an object with helpful
+// context.
+const insertUser = async (user: User): [number, object] => {
   // `name` should be unique. Do nothing when a name already exists.
   const stmt = `
     INSERT INTO user (name, employmentStatus)
@@ -33,10 +34,10 @@ const insertUser = async (user: User): [number, string] => {
   const results = await conn.execute(stmt, user);
   if (results.insertId) {
     // Created
-    return [201, `Created record for ${user.name}!`];
+    return [201, {message: `Created record for ${user.name}!`, userId: results.insertId}];
   } else {
     // Conflict
-    return [409, `${user.name} already exists.`];
+    return [409, {message: `${user.name} already exists.`}];
   }
 };
 
@@ -56,7 +57,7 @@ export const handler: Handlers = {
     // TODO: De-taint input.
     const [responseCode, msg] = await insertUser(body);
     return new Response(
-      JSON.stringify({message: msg}), {
+      JSON.stringify(msg), {
         status: responseCode
       }
     );
