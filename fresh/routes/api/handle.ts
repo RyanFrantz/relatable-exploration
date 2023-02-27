@@ -21,15 +21,29 @@ interface Handle {
   handleType: string;
 }
 
-// TODO: Test that user_id exists before inesrting handle!
+// Test that a user exists.
+// Planetscale/Vitess don't support foreign key constraints so this check must
+// live in the app.
+const userExists = async (userId: number): boolean => {
+  const stmt = `SELECT id FROM user WHERE id = :userId`;
+  const result = await conn.execute(stmt, {userId: userId});
+  if (result.rows?.length > 0) {
+    return true;
+  }
+  return false; // Sane default.
+};
+
 // Inserts a user handle into the database.
 // Returns a number representing the HTTP response and a helpful string message.
 const insertHandle = async (handle: Handle): [number, string] => {
+  if (! await userExists(handle.userId)) {
+    return [404, `User ID ${handle.userId} not found.`];
+  }
   // The combination of user_id, handle, and handleType is unique.
   // Do nothing when a handle already exists.
   const stmt = `
     INSERT INTO handles (user_id, handle, handleType)
-    VALUES(:userId, :handle, handleType)
+    VALUES(:userId, :handle, :handleType)
     ON DUPLICATE KEY UPDATE id=id
   `;
 
@@ -47,6 +61,7 @@ export const handler: Handlers = {
   GET(req) {
     return new Response('N/A');
   },
+  // TODO: Enforce the expected shape of the body in this request.
   async POST(req) {
     let body;
     try {
