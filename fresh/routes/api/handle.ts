@@ -50,10 +50,10 @@ const insertHandle = async (handle: Handle): [number, string] => {
   const results = await conn.execute(stmt, handle);
   if (results.insertId) {
     // Created
-    return [201, `Created handle ${handle.handle} for user ID ${handle.userId}!`];
+    return [201, `Created handle ${handle.handle} of type ${handle.handleType} for user ID ${handle.userId}!`];
   } else {
     // Conflict
-    return [409, `Handle ${handle.handle} already exists for user ID ${handle.userId}.`];
+    return [409, `Handle ${handle.handle} of type ${handle.handleType} already exists for user ID ${handle.userId}.`];
   }
 };
 
