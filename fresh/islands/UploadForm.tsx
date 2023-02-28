@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import UserUploadPreview from '../components/UserUploadPreview.tsx';
 import Papa from 'https://esm.sh/papaparse@5.3.2';
 
 export default function UploadForm() {
@@ -49,15 +50,13 @@ export default function UploadForm() {
         Your CSV should contain two headers: "Name" and "Employment Status".
       </p>
       <input id="csv-input-file" type="file" onChange={handleChange}/>
-      <button type="button" onClick={handleUpload}>Upload CSV</button>
     </form>
     {uploadedData ? (
     <div>
-      {/* Replace this with a component. */}
-      {
-        uploadedData.map(
-          ({name, employmentStatus}) => <p>{`${name} ${employmentStatus}`}</p>)
-      }
+      <article>Preview users to upload:
+        <UserUploadPreview users={uploadedData} />
+        <button type="button" onClick={handleUpload}>Upload Users</button>
+      </article>
     </div>
     ) : (
       <div></div>
