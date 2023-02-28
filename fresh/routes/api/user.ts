@@ -43,7 +43,7 @@ const insertUser = async (user: User): [number, object] => {
 
 export const handler: Handlers = {
   GET(req) {
-    return new Response('N/A');
+    return new Response(JSON.stringify({message: "N/A"}));
   },
   async POST(req) {
     let body;
@@ -52,7 +52,7 @@ export const handler: Handlers = {
       body = await req.json();
     } catch (err) {
       console.log('Error: ', err.message);
-      return new Response('Invalid input!', { status: 400 });
+      return new Response(JSON.stringify({message: 'Invalid input!'}), { status: 400 });
     }
     // TODO: De-taint input.
     const [responseCode, msg] = await insertUser(body);
