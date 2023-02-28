@@ -46,7 +46,7 @@ export default function UploadForm() {
       <p>
         Your CSV should contain two headers: "Name" and "Employment Status".
       </p>
-      <input id="csv-input-file" type="file" onChange={handleChange}/>
+      <input accept="text/csv" id="csv-input-file" type="file" onChange={handleChange}/>
     </form>
     {uploadedData ?
       (
