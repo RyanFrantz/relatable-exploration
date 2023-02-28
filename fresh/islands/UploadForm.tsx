@@ -41,7 +41,27 @@ export default function UploadForm() {
     // We'll call our API from here.
     // Clear uploaded data and replace it with state about results from
     // submitted data so we can display results.
+    const fetchData = async () => {
+      const resp = await fetch('/api/user', {
+        method: "POST",
+        body: {}
+      });
+      console.log('Status: ', resp.status);
+      const respBody = await resp.json();
+      console.log('Response body: ', respBody);
+    };
+    uploadedData.forEach((user) => {
+      console.log(user);
+      fetchData(); // Why does this work but the below fails? Also, no 'await'?!
+      /*
+      const resp = await fetch('/api/user');
+      console.log('Status: ', resp.status);
+      const respBody = await resp.json();
+      console.log('Response body: ', respBody);
+      */
+    });
     setUploadedData(null);
+    // Placeholder, for the case where we have returned from our fetch(es).
     setSubmittedData(true);
   };
 
