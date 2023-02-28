@@ -4,6 +4,7 @@ import Papa from 'https://esm.sh/papaparse@5.3.2';
 
 export default function UploadForm() {
   const [uploadedData, setUploadedData] = useState();
+  const [submittedData, setSubmittedData] = useState();
 
   // https://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
   function camelize(str) {
@@ -38,6 +39,10 @@ export default function UploadForm() {
   const handleUpload = () => {
     console.log('Upload starting...');
     // We'll call our API from here.
+    // Clear uploaded data and replace it with state about results from
+    // submitted data so we can display results.
+    setUploadedData(null);
+    setSubmittedData(true);
   };
 
   return (
@@ -54,6 +59,16 @@ export default function UploadForm() {
         <article>Preview users to upload:
           <UserUploadPreview users={uploadedData} />
           <button type="button" onClick={handleUpload}>Upload Users</button>
+        </article>
+      </div>
+      ) : (
+      <div></div>
+      )
+    }
+    {submittedData ?
+      (
+      <div>
+        <article>Data has been submitted!
         </article>
       </div>
       ) : (
