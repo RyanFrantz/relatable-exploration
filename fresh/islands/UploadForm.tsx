@@ -21,7 +21,6 @@ export default function UploadForm() {
 
   const handleChange = (e) => {
     const file = event.target.files[0];
-    console.log('File to upload: ', file);
     Papa.parse(file, {
       header: true, // Organize by header.
       skipEmptyLines: true,
@@ -29,10 +28,8 @@ export default function UploadForm() {
         return camelize(header); // "Employment Status" -> "employmentStatus"
       },
       complete: function(results) {
-        // TODO: Set state here and use it when the upload button is clicked.
         //console.log(results.data);
         // results.meta.fields contains the header names.
-        console.log(results.data);
         setUploadedData(results.data);
       }
     });
@@ -51,16 +48,17 @@ export default function UploadForm() {
       </p>
       <input id="csv-input-file" type="file" onChange={handleChange}/>
     </form>
-    {uploadedData ? (
-    <div>
-      <article>Preview users to upload:
-        <UserUploadPreview users={uploadedData} />
-        <button type="button" onClick={handleUpload}>Upload Users</button>
-      </article>
-    </div>
-    ) : (
+    {uploadedData ?
+      (
+      <div>
+        <article>Preview users to upload:
+          <UserUploadPreview users={uploadedData} />
+          <button type="button" onClick={handleUpload}>Upload Users</button>
+        </article>
+      </div>
+      ) : (
       <div></div>
-    )
+      )
     }
     </>
   );
