@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import UserUploadPreview from '../components/UserUploadPreview.tsx';
+import UserUploadResult from '../components/UserUploadResult.tsx';
 import Papa from 'https://esm.sh/papaparse@5.3.2';
 
 export default function UploadForm() {
@@ -37,19 +38,20 @@ export default function UploadForm() {
   };
 
   const handleUpload = async () => {
-    console.log('Upload starting...');
-    // We'll call our API from here.
+    const allSubmissions = submittedData || []; // Do this in state init.
     for (const user of uploadedData) {
-      const resp = await fetch('/api/user');
-      console.log('Status: ', resp.status);
+      const resp = await fetch('/api/user', {
+        method: "POST",
+        body: JSON.stringify(user)
+      });
       const respBody = await resp.json();
-      console.log('Response body: ', respBody);
+      const uploadResult = {name: user.name, status: respBody.message};
+      allSubmissions.push(uploadResult);
     }
+    setSubmittedData(allSubmissions);
     // Clear uploaded data and replace it with state about results from
     // submitted data so we can display results.
     setUploadedData(null);
-    // Placeholder, for the case where we have returned from our fetch(es).
-    setSubmittedData(true);
   };
 
   return (
@@ -75,7 +77,8 @@ export default function UploadForm() {
     {submittedData ?
       (
       <div>
-        <article>Data has been submitted!
+        <article>Status of user upload:
+          <UserUploadResult users={submittedData} />
         </article>
       </div>
       ) : (
