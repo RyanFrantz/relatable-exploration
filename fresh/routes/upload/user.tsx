@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
-import Footer from "../components/Footer.tsx";
-import UploadForm from "../islands/UploadForm.tsx";
+import Footer from "../../components/Footer.tsx";
+import UploadForm from "../../islands/UploadForm.tsx";
 
 
 export default function Upload() {
