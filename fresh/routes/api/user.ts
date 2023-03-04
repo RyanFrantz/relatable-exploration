@@ -20,6 +20,22 @@ interface User {
   employmentStatus: string;
 }
 
+// Look up a user.
+// Returns a number representing the HTTP response and an object with helpful
+// context.
+// TODO: Should we define a partial type here, since we only need the 'name'
+// property?
+const getUser = async (user: User): [number, object] => {
+  const stmt = `SELECT id FROM user WHERE name = :name LIMIT 1`;
+  const result = await conn.execute(stmt, user);
+  if (result.rows.length > 0) {
+    const userId = result.rows[0].id;
+    return [200, {id: userId, name: user.name}];
+  } else {
+    return [404, {message: 'User not found'}];
+  }
+};
+
 // Inserts a user into the database.
 // Returns a number representing the HTTP response and an object with helpful
 // context.
@@ -42,8 +58,24 @@ const insertUser = async (user: User): [number, object] => {
 };
 
 export const handler: Handlers = {
-  GET(req) {
-    return new Response(JSON.stringify({message: "N/A"}));
+  async GET(req) {
+    const url = new URL(req.url);
+    const name = url.searchParams.get('name'); // Auto url-decodes.
+    if (!name) {
+      const msg = {message: "Missing or invalid 'name' query parameter"};
+      return new Response(
+        JSON.stringify(msg), {
+          status: 400
+        }
+      );
+    }
+
+    const [responseCode, msg] = await getUser({name: name});
+    return new Response(
+      JSON.stringify(msg), {
+        status: responseCode
+      }
+    );
   },
   async POST(req) {
     let body;
