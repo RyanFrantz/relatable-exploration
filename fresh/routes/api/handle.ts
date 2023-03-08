@@ -35,6 +35,13 @@ const getUserId = async (name: string) => {
   return false; // Sane default.
 };
 
+// Return all handles for a given username.
+const getHandles = async (userId: number) => {
+  const stmt = `SELECT handle, handleType from handles WHERE user_id = :userId`;
+  const result = await conn.execute(stmt, {userId: userId});
+  return result.rows;
+};
+
 // Inserts a user handle into the database.
 // Returns the HTTP response and a helpful string message.
 const insertHandle = async (handle: Handle): [number, string] => {
@@ -62,8 +69,34 @@ const insertHandle = async (handle: Handle): [number, string] => {
 };
 
 export const handler: Handlers = {
-  GET(req) {
-    return new Response(JSON.stringify({message: 'N/A'}));
+  async GET(req) {
+    const url = new URL(req.url);
+    const username = url.searchParams.get('username');
+    if (!username) {
+      const msg = "Missing or invalid 'username' query parameter";
+      return new Response(
+        JSON.stringify(msg), {
+          status: 400
+        }
+      );
+    }
+    const userId = await getUserId(username);
+    // Sane default.
+    let [responseCode, msg] = [
+      404,
+      {message: `User ${username} not found`}
+    ];
+
+    if (userId) {
+      const handles = await getHandles(userId);
+      responseCode = 200;
+      msg = {username: username, handles: handles}
+    }
+    return new Response(
+      JSON.stringify(msg), {
+        status: responseCode
+      }
+    );
   },
   // TODO: Enforce the expected shape of the body in this request.
   async POST(req) {
