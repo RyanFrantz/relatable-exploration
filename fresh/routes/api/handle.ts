@@ -16,6 +16,7 @@ const pConfig = {
 const conn = connect(pConfig);
 
 interface Handle {
+  username: string;
   userId: number;
   handle: string;
   handleType: string;
@@ -24,21 +25,24 @@ interface Handle {
 // Test that a user exists.
 // Planetscale/Vitess don't support foreign key constraints so this check must
 // live in the app.
-const userExists = async (userId: number): boolean => {
-  const stmt = `SELECT id FROM user WHERE id = :userId`;
-  const result = await conn.execute(stmt, {userId: userId});
+const getUserId = async (name: string) => {
+  const stmt = `SELECT id FROM user WHERE name = :name LIMIT 1`;
+  const result = await conn.execute(stmt, {name: name});
   if (result.rows?.length > 0) {
-    return true;
+    console.log(result);
+    return result.rows[0].id;
   }
   return false; // Sane default.
 };
 
 // Inserts a user handle into the database.
-// Returns a number representing the HTTP response and a helpful string message.
+// Returns the HTTP response and a helpful string message.
 const insertHandle = async (handle: Handle): [number, string] => {
-  if (! await userExists(handle.userId)) {
-    return [404, `User ID ${handle.userId} not found.`];
+  const userId = await getUserId(handle.username);
+  if (!userId) {
+    return [404, `User ${handle.username} not found.`];
   }
+  handle.userId = userId;
   // The combination of user_id, handle, and handleType is unique.
   // Do nothing when a handle already exists.
   const stmt = `
@@ -50,10 +54,10 @@ const insertHandle = async (handle: Handle): [number, string] => {
   const results = await conn.execute(stmt, handle);
   if (results.insertId) {
     // Created
-    return [201, `Created handle ${handle.handle} of type ${handle.handleType} for user ID ${handle.userId}!`];
+    return [201, `Created handle ${handle.handle} of type ${handle.handleType} for user ${handle.username}!`];
   } else {
     // Conflict
-    return [409, `Handle ${handle.handle} of type ${handle.handleType} already exists for user ID ${handle.userId}.`];
+    return [409, `Handle ${handle.handle} of type ${handle.handleType} already exists for user ${handle.username}.`];
   }
 };
 
