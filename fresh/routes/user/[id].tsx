@@ -3,40 +3,30 @@ import { Head } from "$fresh/runtime.ts";
 import Footer from "../../components/Footer.tsx";
 import UserHandleRow from "../../islands/UserHandleRow.tsx";
 
-// The function URL for my toy AWS Lambda.
-const lambdaUrl = 'https://safe-badger-75.deno.dev';
-
-interface UserHandle {
-  id: string,
-  employmentStatus: string; // FIXME: We're not sending this at the moment.
-  handleType: string;
-  handle: string;
-  user: string;
-}
-
-// TODO: Understand this TS construct.
-// I generally understand it, but I'm parroting an example I found.
-interface UserHandles extends Array<UserHandle>{};
-
 export const handler: Handlers = {
   async GET(req, ctx) {
     const url = new URL(req.url);
     // Grab the first part of the pathname to use as input for a user ID.
     // NOTE: No checks for numberness, here.
-    const user_id = url.pathname.split('/user/')[1];
-    // NOTE: There is no support for failed requests here.
-    const userUrl = `${lambdaUrl}/${user_id}`;
-    const resp = await fetch(`${lambdaUrl}/${user_id}`);
-    const userHandles: UserHandles[] = await resp.json();
-    //console.log(userHandles);
+    const userId = url.pathname.split('/user/')[1];
+    // Call ourselves. Add our origin, since we're running in a server context.
+    const userUrl = `${url.origin}/api/user/${userId}`;
+    const userResp = await fetch(userUrl);
+    const user = await userResp.json();
+    const userHandleUrl = `${url.origin}/api/user/${userId}/handles`;
+    const handleResp = await fetch(userHandleUrl);
+    const userHandles = await handleResp.json();
     // This will be available at props.data in the page component.
-    return ctx.render(userHandles);
+    const userAndHandles = {
+      user: user,
+      ...userHandles
+    };
+    return ctx.render(userAndHandles);
   }
 }
 
-export default function User({data}: PageProps<UserHandles>) {
-  console.log(data);
-  const username = data[0]?.user;
+export default function User({data}: PageProps) {
+  const username = data.user.name;
   return (
     <>
     <Head>
@@ -62,7 +52,7 @@ export default function User({data}: PageProps<UserHandles>) {
           </tr>
         </thead>
         <tbody>
-        {data.map((userHandle) => (
+        {data.handles.map((userHandle) => (
           <UserHandleRow userHandle={userHandle}/>
         ))}
         </tbody>
