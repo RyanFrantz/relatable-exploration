@@ -15,22 +15,16 @@ const pConfig = {
 
 const conn = connect(pConfig);
 
-interface User {
-  name: string;
-  employmentStatus: string;
-}
-
 // Look up a user.
 // Returns a number representing the HTTP response and an object with helpful
 // context.
-// TODO: Should we define a partial type here, since we only need the 'name'
-// property?
-const getUser = async (user: User): [number, object] => {
-  const stmt = `SELECT id FROM user WHERE name = :name LIMIT 1`;
-  const result = await conn.execute(stmt, user);
+const getUsername = async (userId: number): [number, object] => {
+  const stmt = `SELECT name FROM user WHERE id = :userId LIMIT 1`;
+  const result = await conn.execute(stmt, {userId: userId});
+    console.log(result);
   if (result.rows.length > 0) {
-    const userId = result.rows[0].id;
-    return [200, {id: userId, name: user.name}];
+    const username = result.rows[0].name;
+    return [200, {id: userId, name: username}];
   } else {
     return [404, {message: 'User not found'}];
   }
@@ -60,17 +54,21 @@ const insertUser = async (user: User): [number, object] => {
 export const handler: Handlers = {
   async GET(req) {
     const url = new URL(req.url);
-    const name = url.searchParams.get('name'); // Auto url-decodes.
-    if (!name) {
-      const msg = {message: "Missing or invalid 'name' query parameter"};
+    // Helps ensure we only match numeric IDs, not all strings.
+    const re = /\/api\/user\/(?<userId>\d+)/;
+    const match = url.pathname.match(re);
+    if (!match) {
       return new Response(
-        JSON.stringify(msg), {
+        JSON.stringify({message: 'Invalid user ID'}),
+        {
           status: 400
         }
       );
     }
+    console.log(match);
+    const userId = match.groups.userId;
 
-    const [responseCode, msg] = await getUser({name: name});
+    const [responseCode, msg] = await getUsername(userId);
     return new Response(
       JSON.stringify(msg), {
         status: responseCode
