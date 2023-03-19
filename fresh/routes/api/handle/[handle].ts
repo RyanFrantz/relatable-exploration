@@ -22,6 +22,16 @@ interface Handle {
   handleType: string;
 }
 
+// Given a handle, return the related user.
+const getUserByHandle = async (handle: string) => {
+  const stmt = `SELECT user.id, user.name FROM user
+    INNER JOIN handles ON handles.user_id = user.id
+    WHERE handle = :handle LIMIT 1`
+  const result = await conn.execute(stmt, {handle: handle});
+  const user = result.rows[0] || {};
+  return user;
+};
+
 // Test that a user exists.
 // Planetscale/Vitess don't support foreign key constraints so this check must
 // live in the app.
@@ -33,13 +43,6 @@ const getUserId = async (name: string) => {
     return result.rows[0].id;
   }
   return false; // Sane default.
-};
-
-// Return all handles for a given username.
-const getHandles = async (userId: number) => {
-  const stmt = `SELECT handle, handleType from handles WHERE user_id = :userId`;
-  const result = await conn.execute(stmt, {userId: userId});
-  return result.rows;
 };
 
 // Inserts a user handle into the database.
@@ -69,28 +72,33 @@ const insertHandle = async (handle: Handle): [number, string] => {
 };
 
 export const handler: Handlers = {
+  // /api/handle/foo, /api/handle/fancy%pants
   async GET(req) {
     const url = new URL(req.url);
-    const username = url.searchParams.get('username');
-    if (!username) {
-      const msg = "Missing or invalid 'username' query parameter";
+    // Expect URL-escaped strings.
+    const re = /\/api\/handle\/(?<handle>\S+)/;
+    const match = url.pathname.match(re);
+    if (!match) {
       return new Response(
-        JSON.stringify(msg), {
+        JSON.stringify({message: 'Invalid handle'}),
+        {
           status: 400
         }
       );
     }
-    const userId = await getUserId(username);
+    const handle = match.groups.handle;
+    const user = await getUserByHandle(handle);
+
     // Sane default.
     let [responseCode, msg] = [
       404,
-      {message: `User ${username} not found`}
+      {message: `No user found for handle ${handle}`}
     ];
 
-    if (userId) {
-      const handles = await getHandles(userId);
+    if (Object.keys(user).length > 0) {
       responseCode = 200;
-      msg = {username: username, handles: handles}
+      // {"id":6,"name":"Thibaud Reedman"}
+      msg = user;
     }
     return new Response(
       JSON.stringify(msg), {

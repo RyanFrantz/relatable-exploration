@@ -21,7 +21,6 @@ const conn = connect(pConfig);
 const getUsername = async (userId: number): [number, object] => {
   const stmt = `SELECT name FROM user WHERE id = :userId LIMIT 1`;
   const result = await conn.execute(stmt, {userId: userId});
-    console.log(result);
   if (result.rows.length > 0) {
     const username = result.rows[0].name;
     return [200, {id: userId, name: username}];
@@ -65,7 +64,6 @@ export const handler: Handlers = {
         }
       );
     }
-    console.log(match);
     const userId = match.groups.userId;
 
     const [responseCode, msg] = await getUsername(userId);
