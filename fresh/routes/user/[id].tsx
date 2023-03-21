@@ -29,10 +29,6 @@ export default function User({data}: PageProps) {
   const username = data.user.name;
   return (
     <>
-    <Head>
-      <meta name="author" content="frantz"/>
-      <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
-    </Head>
     <header>
       <nav>
         <a href="/">Home</a>

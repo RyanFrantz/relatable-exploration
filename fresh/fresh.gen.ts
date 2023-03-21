@@ -3,28 +3,30 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import config from "./deno.json" assert { type: "json" };
-import * as $0 from "./routes/api/handle/[handle].ts";
-import * as $1 from "./routes/api/user/[id].ts";
-import * as $2 from "./routes/api/user/[id]/handles.ts";
-import * as $3 from "./routes/index.tsx";
-import * as $4 from "./routes/upload/handle.tsx";
-import * as $5 from "./routes/upload/user.tsx";
-import * as $6 from "./routes/user/[id].tsx";
-import * as $7 from "./routes/users.tsx";
+import * as $0 from "./routes/_app.tsx";
+import * as $1 from "./routes/api/handle/[handle].ts";
+import * as $2 from "./routes/api/user/[id].ts";
+import * as $3 from "./routes/api/user/[id]/handles.ts";
+import * as $4 from "./routes/index.tsx";
+import * as $5 from "./routes/upload/handle.tsx";
+import * as $6 from "./routes/upload/user.tsx";
+import * as $7 from "./routes/user/[id].tsx";
+import * as $8 from "./routes/users.tsx";
 import * as $$0 from "./islands/UploadForm.tsx";
 import * as $$1 from "./islands/UploadHandleForm.tsx";
 import * as $$2 from "./islands/UserHandleRow.tsx";
 
 const manifest = {
   routes: {
-    "./routes/api/handle/[handle].ts": $0,
-    "./routes/api/user/[id].ts": $1,
-    "./routes/api/user/[id]/handles.ts": $2,
-    "./routes/index.tsx": $3,
-    "./routes/upload/handle.tsx": $4,
-    "./routes/upload/user.tsx": $5,
-    "./routes/user/[id].tsx": $6,
-    "./routes/users.tsx": $7,
+    "./routes/_app.tsx": $0,
+    "./routes/api/handle/[handle].ts": $1,
+    "./routes/api/user/[id].ts": $2,
+    "./routes/api/user/[id]/handles.ts": $3,
+    "./routes/index.tsx": $4,
+    "./routes/upload/handle.tsx": $5,
+    "./routes/upload/user.tsx": $6,
+    "./routes/user/[id].tsx": $7,
+    "./routes/users.tsx": $8,
   },
   islands: {
     "./islands/UploadForm.tsx": $$0,

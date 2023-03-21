@@ -6,9 +6,6 @@ import UploadHandleForm from "../../islands/UploadHandleForm.tsx";
 export default function UploadHandle() {
   return (
     <>
-      <Head>
-        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
-      </Head>
       <header>
         <nav>
           <a href="/">Home</a>

@@ -35,10 +35,6 @@ export default function Users({data}) {
   //console.log(data);
   return (
     <>
-    <Head>
-      <meta name="author" content="frantz"/>
-      <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
-    </Head>
     <header>
       <nav>
         <a href="/">Home</a>
