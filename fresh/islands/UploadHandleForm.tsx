@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import HandleUploadPreview from '../components/HandleUploadPreview.tsx';
-import HandleUploadResult from '../components/HandleUploadResult.tsx';
+import PreviewHandleUpload from '../components/PreviewHandleUpload.tsx';
+import UploadHandleResult from '../components/UploadHandleResult.tsx';
 import Papa from 'https://esm.sh/papaparse@5.3.2';
 
 export default function UploadHandleForm() {
@@ -77,7 +77,7 @@ export default function UploadHandleForm() {
       (
       <div>
         <article>Status of user upload:
-          <HandleUploadResult handles={submittedData} />
+          <UploadHandleResult handles={submittedData} />
         </article>
       </div>
       ) : (

@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import Footer from "../../components/Footer.tsx";
-import UploadForm from "../../islands/UploadForm.tsx";
+import UploadUserForm from "../../islands/UploadUserForm.tsx";
 
 
 export default function Upload() {
@@ -13,7 +13,7 @@ export default function Upload() {
         </nav>
       </header>
       <main>
-        <UploadForm />
+        <UploadUserForm />
       </main>
       <Footer/>
     </>

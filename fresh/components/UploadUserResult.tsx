@@ -1,4 +1,4 @@
-export default function UserUploadResult({users}) {
+export default function UploadUserResult({users}) {
   return (
     <table>
       <thead>

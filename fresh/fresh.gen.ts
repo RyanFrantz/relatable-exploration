@@ -12,8 +12,8 @@ import * as $5 from "./routes/upload/handle.tsx";
 import * as $6 from "./routes/upload/user.tsx";
 import * as $7 from "./routes/user/[id].tsx";
 import * as $8 from "./routes/users.tsx";
-import * as $$0 from "./islands/UploadForm.tsx";
-import * as $$1 from "./islands/UploadHandleForm.tsx";
+import * as $$0 from "./islands/UploadHandleForm.tsx";
+import * as $$1 from "./islands/UploadUserForm.tsx";
 import * as $$2 from "./islands/UserHandleRow.tsx";
 
 const manifest = {
@@ -29,8 +29,8 @@ const manifest = {
     "./routes/users.tsx": $8,
   },
   islands: {
-    "./islands/UploadForm.tsx": $$0,
-    "./islands/UploadHandleForm.tsx": $$1,
+    "./islands/UploadHandleForm.tsx": $$0,
+    "./islands/UploadUserForm.tsx": $$1,
     "./islands/UserHandleRow.tsx": $$2,
   },
   baseUrl: import.meta.url,

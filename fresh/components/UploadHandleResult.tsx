@@ -1,19 +1,17 @@
-export default function HandleUploadPreview({handles}) {
+export default function UploadHandleResult({handles}) {
   return (
     <table>
       <thead>
         <tr>
-          <th>User ID</th>
           <th>Handle</th>
-          <th>Handle Type</th>
+          <th>Upload Status</th>
         </tr>
       </thead>
       <tbody>
       {handles.map((handle, idx) => (
         <tr key={idx}>
-          <td>{handle.userId}</td>
           <td>{handle.handle}</td>
-          <td>{handle.handleType}</td>
+          <td>{handle.status}</td>
         </tr>
       ))}
       </tbody>

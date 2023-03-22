@@ -1,4 +1,4 @@
-export default function UserUploadPreview({users}) {
+export default function PreviewUserUpload({users}) {
   return (
     <table>
       <thead>

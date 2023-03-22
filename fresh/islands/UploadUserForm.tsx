@@ -1,9 +1,9 @@
 import { useState } from "preact/hooks";
-import UserUploadPreview from '../components/UserUploadPreview.tsx';
-import UserUploadResult from '../components/UserUploadResult.tsx';
+import PreviewUserUpload from '../components/PreviewUserUpload.tsx';
+import UploadUserResult from '../components/UploadUserResult.tsx';
 import Papa from 'https://esm.sh/papaparse@5.3.2';
 
-export default function UploadForm() {
+export default function UploadUserForm() {
   const [uploadedData, setUploadedData] = useState();
   const [submittedData, setSubmittedData] = useState();
 
@@ -66,7 +66,7 @@ export default function UploadForm() {
       (
       <div>
         <article>Preview users to upload:
-          <UserUploadPreview users={uploadedData} />
+          <PreviewUserUpload users={uploadedData} />
           <button type="button" onClick={handleUpload}>Upload Users</button>
         </article>
       </div>
@@ -78,7 +78,7 @@ export default function UploadForm() {
       (
       <div>
         <article>Status of user upload:
-          <UserUploadResult users={submittedData} />
+          <UploadUserResult users={submittedData} />
         </article>
       </div>
       ) : (
