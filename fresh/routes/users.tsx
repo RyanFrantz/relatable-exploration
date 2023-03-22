@@ -38,7 +38,7 @@ export default function Users({data}) {
     <header>
       <nav>
         <a href="/">Home</a>
-        <a href="/upload">Upload Users</a>
+        <a href="/upload/user">Upload Users</a>
       </nav>
     </header>
     <main>
