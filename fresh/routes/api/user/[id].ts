@@ -1,4 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
+import { z } from 'https://esm.sh/zod@3.21.4';
 import { connect } from 'https://esm.sh/*@planetscale/database@1.4.0';
 
 // Insert a single user.
@@ -28,6 +29,11 @@ const getUsername = async (userId: number): [number, object] => {
     return [404, {message: 'User not found'}];
   }
 };
+
+const User = z.object({
+  name: z.string(),
+  employmentStatus: z.string()
+});
 
 // Inserts a user into the database.
 // Returns a number representing the HTTP response and an object with helpful
@@ -76,8 +82,10 @@ export const handler: Handlers = {
   async POST(req) {
     let body;
     try {
-      // TODO: Validate the body structure meets our expectation.
       body = await req.json();
+      // TODO: Read Error to tell the user what is missing/incorrect.
+      // Validate our input meets expectations.
+      User.parse(body);
     } catch (err) {
       console.log('Error: ', err.message);
       return new Response(JSON.stringify({message: 'Invalid input!'}), { status: 400 });

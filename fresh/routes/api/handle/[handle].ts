@@ -12,6 +12,8 @@ const pConfig = {
 const conn = connect(pConfig);
 
 // Given a handle, return the related user.
+// THINK: Should we allow for a case where multiple people have the same
+// handle?
 const getUserByHandle = async (handle: string) => {
   const stmt = `SELECT user.id, user.name FROM user
     INNER JOIN handles ON handles.user_id = user.id
