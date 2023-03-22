@@ -154,6 +154,21 @@
     "https://esm.sh/v108/@types/node@16.18.12/tls.d.ts": "8fa9d6f5291480ce05e34201404e7e8baedff30441a7773d494701ea407d5636",
     "https://esm.sh/v108/@types/papaparse@5.3.7/index.d.ts": "5d9546a6faffb28ea2dd5dd631101ee7c5faa90829683568ba3ee9de55a3f63e",
     "https://esm.sh/v108/node.ns.d.ts": "0fb081f0cd2150931bd54baa04f31466abd9ca701fd9060d07931402cf8367ba",
-    "https://esm.sh/v108/papaparse@5.3.2/deno/papaparse.js": "99ef70ae195fd5c021d1ab9951247a41efd5c7e8d39736d4e0d7ecd157ec1cd3"
+    "https://esm.sh/v108/papaparse@5.3.2/deno/papaparse.js": "99ef70ae195fd5c021d1ab9951247a41efd5c7e8d39736d4e0d7ecd157ec1cd3",
+    "https://esm.sh/v111/zod@3.21.4/deno/zod.js": "ef6535dd2aa5c37b49464e9f474f5e59252e3f50f7f03183d43e997be3f62263",
+    "https://esm.sh/v111/zod@3.21.4/index.d.ts": "b51c954b9557b1dcb03b2bf34cd136e710cb9aa276e686cac0e291249590a52a",
+    "https://esm.sh/v111/zod@3.21.4/lib/ZodError.d.ts": "1f19511459549a66526d9dcc3b2288e59fa5fd4cf42b390a945d0bdc289806df",
+    "https://esm.sh/v111/zod@3.21.4/lib/errors.d.ts": "5ec2790f877581637c058eb5bbb72e855a078620d0781d2a6a8f308fe1d5436f",
+    "https://esm.sh/v111/zod@3.21.4/lib/external.d.ts": "91cec2fe1e1fb2574812a29a57ad2c39a1e69b0fa1179547382c92649fc5c66e",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/enumUtil.d.ts": "f672c876c1a04a223cf2023b3d91e8a52bb1544c576b81bf64a8fec82be9969c",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/errorUtil.d.ts": "98a9cc18f661d28e6bd31c436e1984f3980f35e0f0aa9cf795c54f8ccb667ffe",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/parseUtil.d.ts": "d3dbfc2f2fbf2c1bdea72db72f9f5c95d2ca5b4d32c9e229764ebaba0920203c",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/partialUtil.d.ts": "be2da97df422506d54e0e1727a40f6315c7311931b65a552b3172148db734c43",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/typeAliases.d.ts": "5487b97cfa28b26b4a9ef0770f872bdbebd4c46124858de00f242c3eed7519f4",
+    "https://esm.sh/v111/zod@3.21.4/lib/helpers/util.d.ts": "7a01f546ace66019156e4232a1bee2fabc2f8eabeb052473d926ee1693956265",
+    "https://esm.sh/v111/zod@3.21.4/lib/index.d.ts": "e6e0b04af1500398c8840582cce03d8907d6475005eb490f0e07bb33db6da66c",
+    "https://esm.sh/v111/zod@3.21.4/lib/locales/en.d.ts": "f8ec1611afb8d132c6c71822718805866890cf2071025153af97508eff24e4b6",
+    "https://esm.sh/v111/zod@3.21.4/lib/types.d.ts": "d7eecca2a9e02b2b2f51eaef95956f490a5780d03b32b9865068a63a26810f01",
+    "https://esm.sh/zod@3.21.4": "94701bedfa06a8c4943ca9e587c6865f92751cc641cc4920f663ba6be16c78d9"
   }
 }

@@ -1,5 +1,6 @@
 // Will replace/consume https://safe-badger-75.deno.dev
 import { Handlers } from "$fresh/server.ts";
+import { z } from 'https://esm.sh/zod@3.21.4';
 import { connect } from 'https://esm.sh/*@planetscale/database@1.4.0';
 
 // Planetscale config.
@@ -19,10 +20,10 @@ const getHandles = async (userId: number) => {
   return result.rows;
 }
 
-interface Handle {
-  handle: string;
-  handleType: string;
-}
+const Handle = z.object({
+  handle: z.string(),
+  handleType: z.string()
+});
 
 // Test that a user exists.
 // Planetscale/Vitess don't support foreign key constraints so this check must
@@ -102,10 +103,12 @@ export const handler: Handlers = {
     }
     const userId = match.groups.userId;
 
-    let body: Handle;
+    let body;
     try {
-      // TODO: Validate the body structure meets our expectation.
       body = await req.json();
+      // TODO: Read Error to tell the user what is missing/incorrect.
+      // Validate our input meets expectations.
+      Handle.parse(body);
     } catch (err) {
       console.log('Error: ', err.message);
       return new Response(JSON.stringify({message: 'Invalid input!'}), { status: 400 });
